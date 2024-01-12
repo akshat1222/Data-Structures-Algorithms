@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include <conio.h>
 #include <stdlib.h>
-int linearSearch(int arr[], int size, int element)
+int linearSearch(int arr[], int element, int size)
 {
     for (int i = 0; i < size; i++)
     {
@@ -105,7 +104,7 @@ int main()
         int searchIndex = binarySearchasc(arr, element, size);
         if (searchIndex == element)
         {
-            printf("Element %d is found in array:\n");
+            printf("Element %d is found in array:\n",element);
         }
         else if (searchIndex == -1)
         {
@@ -119,7 +118,7 @@ int main()
         int searchIndex = binarySearchdesc(arr, element, size);
         if (searchIndex == element)
         {
-            printf("Element %d is found in array:\n");
+            printf("Element %d is found in array:\n",element);
         }
         else if (searchIndex == -1)
         {

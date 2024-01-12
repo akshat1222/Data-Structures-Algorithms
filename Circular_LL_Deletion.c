@@ -59,27 +59,29 @@ struct Node *DeleteAtIndex(struct Node *head, int index)
     {
         printf("Delete Last List is empty\n");
     }
-    if (index >= len || index < 0)
+    elseif(index >= len || index < 0)
     {
         printf("Index is not found:\n");
     }
-
-    if (index == 0)
+    elseif(index == 0)
     {
         printf("Index is zero so deleting the first node:\n");
         Deletefirst(head);
     }
-    while (len > 0)
+    else
     {
-        if (index == count)
+        while (len > 0)
         {
-            prev->next = next->next;
-            free(next);
+            if (index == count)
+            {
+                prev->next = next->next;
+                free(next);
+            }
+            prev = prev->next;
+            next = prev->next;
+            len--;
+            count++;
         }
-        prev = prev->next;
-        next = prev->next;
-        len--;
-        count++;
     }
 }
 
@@ -99,16 +101,30 @@ struct Node *DeleteAtLast(struct Node *head)
 
 struct Node *DeleteWithValue(struct Node *head, int value)
 {
-    struct Node *ptr = head;
-    struct Node *p = head->next;
-    while (p->data != value && p->next != head)
+    if (value == head->data)
     {
-        ptr = ptr->next;
-        p = p->next;
+        struct Node *p = head->next;
+        do
+        {
+            p = p->next;
+        } while (p->next != head);
+        p->next = head->next;
+        head = head->next;
+        return head;
     }
-    ptr->next = p->next;
-    free(p);
-    return head;
+    else
+    {
+        struct Node *ptr = head;
+        struct Node *p = head->next;
+        while (p->data != value && p->next != head)
+        {
+            ptr = ptr->next;
+            p = p->next;
+        }
+        ptr->next = p->next;
+        free(p);
+        return head;
+    }
 }
 
 int main()
@@ -164,6 +180,7 @@ int main()
         scanf("%d", &a);
         printf("Linked List after deletion:\n");
         head = DeleteWithValue(head, a);
+        break;
     default:
         printf("Please select a valid choice:\n");
         break;

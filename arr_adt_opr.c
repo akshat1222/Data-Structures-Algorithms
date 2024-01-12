@@ -45,9 +45,9 @@ int indInsert(struct myArray *a, int size, int index, int element)
 
 int deleteelement(struct myArray *a, int size, int index)
 {
-    for (int i = index; i <= size; i++)
+    for (int i = index; i <size; i++)
     {
-        a[i] = a[i + 1];
+        a->ptr[i] = a->ptr[i + 1];
     }
 }
 
@@ -80,6 +80,7 @@ int main()
         printf("Enter index of element you want to delete:\n");
         scanf("%d", &ind);
         deleteelement(&arr,u_size,ind);
+        u_size -=1;
     default:
         break;
     }
