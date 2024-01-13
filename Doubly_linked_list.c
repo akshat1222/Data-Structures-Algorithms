@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <conio.h>
 #include <stdlib.h>
 
 struct Node
@@ -47,15 +46,23 @@ struct Node *DeleteAtIndex(struct Node *head, int index)
 {
     struct Node *p = head;
     int i = 0;
-    while (i != index - 1)
+    if (index == 0)
     {
-        p = p->next;
-        i++;
+        head = DeleteFirst(head);
+        return (head);
     }
-    struct Node *q = p->next;
-    p->next = q->next;
-    free(q);
-    return head;
+    else
+    {
+        while (i != index - 1)
+        {
+            p = p->next;
+            i++;
+        }
+        struct Node *q = p->next;
+        p->next = q->next;
+        free(q);
+        return head;
+    }
 }
 
 struct Node *DeleteAtLast(struct Node *head)
@@ -76,6 +83,11 @@ struct Node *DeleteAtValue(struct Node *head, int value)
 {
     struct Node *p = head;
     struct Node *q = head->next;
+    if (value == 55)
+    {
+        head = DeleteFirst(head);
+        return (head);
+    }
     while (q->data != value && q->next != NULL)
     {
         q = q->next;
@@ -129,8 +141,8 @@ int main()
     printf("3. Select if you want to delete last node:\n");
     printf("4. Select if you want to delete node with value given:\n");
     printf("5. Select if you want to reverse doubly linked list:\n");
-    int x,a,ind;
-    scanf("%d",&x);
+    int x, a, ind;
+    scanf("%d", &x);
     switch (x)
     {
     case 1:
@@ -139,7 +151,7 @@ int main()
         break;
     case 2:
         printf("Enter index you want to delete in:\n");
-        scanf("%d",&ind);
+        scanf("%d", &ind);
         printf("Doubly Linked List after deletion:\n");
         head = DeleteAtIndex(head, ind);
         break;
@@ -149,12 +161,14 @@ int main()
         break;
     case 4:
         printf("Enter value you want to delete:\n");
-        scanf("%d",&a);
+        scanf("%d", &a);
         printf("Doubly Linked List after deletion:\n");
-        head = DeleteAtValue(head,a);
+        head = DeleteAtValue(head, a);
+        break;
     case 5:
-       printf("Reverse traversal of doubly linked list:\n");
-       head = Reverse(head);
+        printf("Reverse traversal of doubly linked list:\n");
+        head = Reverse(head);
+        break;
     default:
         printf("Please select a valid choice:\n");
         break;

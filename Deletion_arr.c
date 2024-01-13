@@ -1,6 +1,5 @@
 
 #include <stdio.h>
-#include <conio.h>
 #include <stdlib.h>
 int deleteelement(int arr[], int size, int index)
 {
