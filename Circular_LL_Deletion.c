@@ -49,40 +49,18 @@ struct Node *Deletefirst(struct Node *head)
     return head;
 }
 
-struct Node *DeleteAtIndex(struct Node *head, int index)
-{
-    int len = Length(head);
-    int count = 1;
-    struct Node *prev = head, *next = head;
-
-    if (head == NULL)
+struct Node * DeleteAtIndex(struct Node * head, int index){
+    struct Node *p = head;
+    struct Node *q = head->next;
+    for (int i = 0; i < index-1; i++)
     {
-        printf("Delete Last List is empty\n");
+        p = p->next;
+        q = q->next;
     }
-    elseif(index >= len || index < 0)
-    {
-        printf("Index is not found:\n");
-    }
-    elseif(index == 0)
-    {
-        printf("Index is zero so deleting the first node:\n");
-        Deletefirst(head);
-    }
-    else
-    {
-        while (len > 0)
-        {
-            if (index == count)
-            {
-                prev->next = next->next;
-                free(next);
-            }
-            prev = prev->next;
-            next = prev->next;
-            len--;
-            count++;
-        }
-    }
+    
+    p->next = q->next;
+    free(q);
+    return head;
 }
 
 struct Node *DeleteAtLast(struct Node *head)
