@@ -33,6 +33,9 @@ int binarySearchasc(int arr[], int element, int size)
             high = mid - 1;
         }
     }
+
+
+    
     return -1;
 }
 

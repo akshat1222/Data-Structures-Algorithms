@@ -1,113 +1,115 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-struct Node
+#include <string.h>
+ 
+struct stack
 {
-    int data;
-    struct Node *next;
+    int size;
+    int top;
+    char *arr;
 };
-
-void linkedListTraversal(struct Node *ptr)
+ 
+int stackTop(struct stack* sp){
+    return sp->arr[sp->top];
+}
+ 
+int isEmpty(struct stack *ptr)
 {
-    while (ptr != NULL)
+    if (ptr->top == -1)
     {
-        printf("Element: %d\n", ptr->data);
-        ptr = ptr->next;
+        return 1;
+    }
+    else
+    {
+        return 0;
     }
 }
-
-// Case 1: Deleting the first element from the linked list
-struct Node * deleteFirst(struct Node * head){
-    struct Node * ptr = head;
-    head = head->next;
-    free(ptr);
-    return head;
-}
-
-// Case 2: Deleting the element at a given index from the linked list
-struct Node * deleteAtIndex(struct Node * head, int index){
-    struct Node *p = head;
-    struct Node *q = head->next;
-    for (int i = 0; i < index-1; i++)
+ 
+int isFull(struct stack *ptr)
+{
+    if (ptr->top == ptr->size - 1)
     {
-        p = p->next;
-        q = q->next;
+        return 1;
     }
-    
-    p->next = q->next;
-    free(q);
-    return head;
-}
-
-// Case 3: Deleting the last element
-struct Node * deleteAtLast(struct Node * head){
-    struct Node *p = head;
-    struct Node *q = head->next;
-    while(q->next !=NULL)
+    else
     {
-        p = p->next;
-        q = q->next;
+        return 0;
     }
-    
-    p->next = NULL;
-    free(q);
-    return head;
 }
-
-
-// Case 4: Deleting the element with a given value from the linked list
-struct Node * deleteAtValue(struct Node * head, int value){
-    struct Node *p = head;
-    struct Node *q = head->next;
-    while(q->data!=value && q->next!= NULL)
+ 
+void push(struct stack* ptr, char val){
+    if(isFull(ptr)){
+        printf("Stack Overflow! Cannot push %d to the stack\n", val);
+    }
+    else{
+        ptr->top++;
+        ptr->arr[ptr->top] = val;
+    }
+}
+ 
+char pop(struct stack* ptr){
+    if(isEmpty(ptr)){
+        printf("Stack Underflow! Cannot pop from the stack\n");
+        return -1;
+    }
+    else{
+        char val = ptr->arr[ptr->top];
+        ptr->top--;
+        return val;
+    }
+}
+int precedence(char ch){
+    if(ch == '*' || ch=='/')
+        return 3;
+    else if(ch == '+' || ch=='-')
+        return 2; 
+    else
+        return 0;
+}
+ 
+int isOperator(char ch){
+    if(ch=='+' || ch=='-' ||ch=='*' || ch=='/') 
+        return 1;
+    else
+        return 0;
+}
+char* infixToPostfix(char* infix){
+    struct stack * sp = (struct stack *) malloc(sizeof(struct stack));
+    sp->size = 10; 
+    sp->top = -1;
+    sp->arr = (char *) malloc(sp->size * sizeof(char));
+    char * postfix = (char *) malloc((strlen(infix)+1) * sizeof(char));
+    int i=0; // Track infix traversal
+    int j = 0; // Track postfix addition 
+    while (infix[i]!='\0')
     {
-        p = p->next;
-        q = q->next;
+        if(!isOperator(infix[i])){
+            postfix[j] = infix[i];
+            j++;
+            i++;
+        }
+        else{
+            if(precedence(infix[i])> precedence(stackTop(sp))){
+                push(sp, infix[i]);
+                i++;
+            }
+            else{
+                postfix[j] = pop(sp);
+                j++;
+            }
+        }
     }
-    
-    if(q->data == value){
-        p->next = q->next;
-        free(q);
+    while (!isEmpty(sp))    
+    {
+        postfix[j] = pop(sp);
+        j++;
     }
-    return head;
+    postfix[j] = '\0';
+    return postfix;
 }
 int main()
 {
-    struct Node *head;
-    struct Node *second;
-    struct Node *third;
-    struct Node *fourth;
-
-    // Allocate memory for nodes in the linked list in Heap
-    head = (struct Node *)malloc(sizeof(struct Node));
-    second = (struct Node *)malloc(sizeof(struct Node));
-    third = (struct Node *)malloc(sizeof(struct Node));
-    fourth = (struct Node *)malloc(sizeof(struct Node));
-
-    // Link first and second nodes
-    head->data = 4;
-    head->next = second;
-
-    // Link second and third nodes
-    second->data = 3;
-    second->next = third;
-
-    // Link third and fourth nodes
-    third->data = 8;
-    third->next = fourth;
-
-    // Terminate the list at the third node
-    fourth->data = 1;
-    fourth->next = NULL;
-
-    printf("Linked list before deletion\n");
-    linkedListTraversal(head);
-
-    // head = deleteFirst(head); // For deleting first element of the linked list
-    // head = deleteAtIndex(head, 2);
-    head = deleteAtIndex(head,3);
-    printf("Linked list after deletion\n");
-    linkedListTraversal(head);
-
+    char * infix = "x-y/z-k*d";
+    printf("postfix is %s", infixToPostfix(infix));
     return 0;
 }
